@@ -30,26 +30,21 @@ class App extends Component {
     }
   }
 
-  handleChange(event) {
-    console.log(event)
-    this.tempTask = event.target.value
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    console.log('A name was submitted: ' + this.tempTask);
-    event.preventDefault();
-
-    this.setState({ value: "" });
-    this.addTask()
+  constructor() {
+    super()
+    if (localStorage.getItem('state') === undefined || localStorage.getItem('state') === null) {
+      this.state.tasks = {}
+    }
+    localStorage.setItem('state', this.state)
   }
 
   addTask = (taskName) => {
+    console.log(taskName)
     const tasks = this.state.tasks
 
     let tempTask = {
-      name: this.tempTask,
-      description: "Description de la tache " + this.tempTask,
+      name: taskName,
+      description: "Description de la tache " + taskName,
       createdDate: 1542976982,
       todoDate: 1543236182,
       done: false
@@ -79,11 +74,10 @@ class App extends Component {
       <Task className="task" key={taskId} task={this.state.tasks[taskId]} changeState={() => this.changeState(taskId)}/>
     ))
 
-    console.log(list)
     return (
       <div className="App">
         <h1>To Do App</h1>
-        <FormAddTask state={this.state} value={this.state.value} handleChange={(event) => this.handleChange(event)} handleSubmit={(event) => this.handleSubmit(event)}/>
+        <FormAddTask state={this.state} value={this.state.value} addTask={(value) => this.addTask(value)}/>
         {list}
       </div>
     );
