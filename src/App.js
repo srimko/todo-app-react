@@ -3,31 +3,12 @@ import Task from './components/Task'
 import FormAddTask from './components/FormAddTask'
 import './App.css';
 
+// Firebase 
+import base from './base'
+
 class App extends Component {
   state = {
-    tasks: {
-      "xldoencjfn": {
-        name: "Tache 1",
-        description: "Description tache 1",
-        createdDate: 1542976982,
-        todoDate: 1543236182,
-        done: false
-      },
-      "xldamngzfe": {
-        name: "Tache 2",
-        description: "Description tache 2",
-        createdDate: 1542976982,
-        todoDate: 1543236182,
-        done: true
-      },
-      "vldqpncjfe": {
-        name: "Tache 3",
-        description: "Description tache 3",
-        createdDate: 1542976982,
-        todoDate: 1543236182,
-        done: false
-      }
-    }
+    tasks: {}
   }
 
   constructor() {
@@ -36,6 +17,13 @@ class App extends Component {
       this.state.tasks = {}
     }
     localStorage.setItem('state', this.state)
+  }
+
+  componentDidMount () {
+    base.syncState('/', {
+      context: this,
+      'state': 'tasks'
+    })
   }
 
   addTask = (taskName) => {
